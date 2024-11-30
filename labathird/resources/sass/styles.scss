@@ -1,0 +1,34 @@
+
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+  xxxl: 1600px
+);
+
+
+
+$darkgrey: #0d1b2a;
+$bluegrey: #1b263b;
+$bluelight: #415a77;
+$bluemorelight: #778da9;
+$textcolor: #8592a9;
+$white: #c3c4cf;
+
+$secondary: $bluemorelight;
+$primary: $bluegrey;
+$body-bg: $bluelight;
+$body-color: $white;
+$success: $darkgrey;  
+
+@import "bootstrap/scss/bootstrap";
+
+@media screen and (min-width: 1601px) {
+    .container {
+        max-width: 1111px;
+    }
+}
