@@ -22,9 +22,10 @@ class CreateChessGrandmastersTable extends Migration
             $table->string('image_path')->nullable(); // Ссылка на картинку, может быть пустой
             $table->text('info')->nullable();
             $table->timestamps(); // Поля created_at и updated_at
+            $table->softDeletes();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      *
