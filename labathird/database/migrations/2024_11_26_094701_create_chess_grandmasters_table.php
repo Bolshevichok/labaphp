@@ -24,7 +24,7 @@ class CreateChessGrandmastersTable extends Migration
             $table->timestamps(); // Поля created_at и updated_at
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *
