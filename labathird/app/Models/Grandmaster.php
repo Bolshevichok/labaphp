@@ -5,11 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Transliterator;
+
 
 class Grandmaster extends Model
 {
     use HasFactory;
-
+    use SoftDeletes;
     protected $table = 'chess_grandmasters';
 
     protected $fillable = [
@@ -24,18 +27,6 @@ class Grandmaster extends Model
     protected $casts = [
         'birth_date' => 'date',
     ];
-    // protected $casts = [
-    //     'birth_date' => 'date:Y-m-d', // Указывает, что формат даты должен быть без времени
-    // ];
-    
-
-    //     public function get($key)
-    // {
-    //     if ($key === 'birth_date' && isset($this->attributes['birth_date'])) {
-    //         return Carbon::parse($this->attributes['birth_date'])->format('Y-m-d');
-    //     }
-    //     return parent::get($key);
-    // }
 
     public function set($key, $value)
     {
@@ -45,13 +36,46 @@ class Grandmaster extends Model
             parent::set($key, $value);
         }
     }
+
+    // Мутатор для поля 'name'
+    public function setNameAttribute($value)
+    {
+        if ($value !== null && $value !== '') {
+            $value = mb_convert_encoding($value, 'UTF-8', 'auto');
+            $transliterator = Transliterator::create('Any-Lower; Any-Title');
+            $this->attributes['name'] = $transliterator->transliterate($value);
+        }
+    }
+
+    // Мутатор для поля 'country'
+    public function setCountryAttribute($value)
+    {
+        if ($value) {
+            $transliterator = Transliterator::create('Any-Lower; Any-Title');
+            $this->attributes['country'] = $transliterator->transliterate($value);
+        }
+    }
+
+    // Мутатор для поля 'max_rating'
+    public function setMaxRatingAttribute($value)
+    {
+        $this->attributes['max_rating'] = min((int)$value, 3000);
+    }
+
+    // Мутатор для поля 'image_path'
+    public function setImagePathAttribute($value)
+    {
+        $this->attributes['image_path'] = strtolower($value);
+    }
+
+    // Мутатор для поля 'info'
+    public function setInfoAttribute($value)
+    {
+        $this->attributes['info'] = strip_tags($value);
+    }
+
     public function getBirthDateAttribute($value)
     {
         return Carbon::parse($value)->format('Y-m-d');
     }
-
-
-
-
-
 }
